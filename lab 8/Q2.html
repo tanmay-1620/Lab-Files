@@ -1,0 +1,51 @@
+import React, { useState, useEffect } from 'react';
+
+const Stopwatch = () => {
+  // State for whether the stopwatch is running
+  const [isRunning, setIsRunning] = useState(false);
+  // State for elapsed time
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  // useEffect to handle starting and stopping the stopwatch
+  useEffect(() => {
+    let intervalId;
+
+    if (isRunning) {
+      // Start the stopwatch
+      intervalId = setInterval(() => {
+        // Increment elapsed time every 10 milliseconds
+        setElapsedTime(prevElapsedTime => prevElapsedTime + 10);
+      }, 10);
+    } else {
+      // Stop the stopwatch
+      clearInterval(intervalId);
+    }
+
+    // Cleanup function to clear interval when component unmounts or is re-rendered
+    return () => clearInterval(intervalId);
+  }, [isRunning]);
+
+  // Function to toggle running state of the stopwatch
+  const toggleRunning = () => {
+    setIsRunning(!isRunning);
+  };
+
+  // Function to reset stopwatch to initial state
+  const reset = () => {
+    setIsRunning(false);
+    setElapsedTime(0);
+  };
+  return (
+    <div>
+      <h2>Stopwatch</h2>
+      {/* Display elapsed time in minutes:seconds:milliseconds format */}
+      <p>{`${String(Math.floor((elapsedTime / 60000) % 60)).padStart(2, '0')}:${String(Math.floor((elapsedTime / 1000) % 60)).padStart(2, '0')}:${String(Math.floor((elapsedTime / 10) % 100)).padStart(2, '0')}`}</p>
+      {/* Button to start/pause stopwatch */}
+      <button onClick={toggleRunning}>{isRunning ? 'Pause' : 'Start'}</button>
+      {/* Button to reset stopwatch */}
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+};
+
+export default Stopwatch;

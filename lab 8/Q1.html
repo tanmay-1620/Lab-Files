@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+
+const CurrencyConverter = () => {
+  const [amount, setAmount] = useState('');
+  const [fromCurrency, setFromCurrency] = useState('USD');
+  const [toCurrency, setToCurrency] = useState('EUR');
+  const [convertedAmount, setConvertedAmount] = useState('');
+
+  const exchangeRates = {
+    USD: {
+      EUR: 0.84,
+      GBP: 0.72,
+      JPY: 109.25,
+    },
+    EUR: {
+      USD: 1.19,
+      GBP: 0.86,
+      JPY: 130.90,
+    },
+    GBP: {
+      USD: 1.39,
+      EUR: 1.17,
+      JPY: 150.31,
+    },
+    JPY: {
+      USD: 0.0091,
+      EUR: 0.0076,
+      GBP: 0.0066,
+    },
+  };
+
+  const handleAmountChange = (e) => {
+    setAmount(e.target.value);
+  };
+
+  const handleFromCurrencyChange = (e) => {
+    setFromCurrency(e.target.value);
+  };
+
+  const handleToCurrencyChange = (e) => {
+    setToCurrency(e.target.value);
+  };
+
+  const convertCurrency = () => {
+    const rate = exchangeRates[fromCurrency][toCurrency];
+    const converted = amount * rate;
+    setConvertedAmount(converted.toFixed(2));
+  };
+
+  return (
+    <div>
+      <h2>Currency Converter</h2>
+      <div>
+        <label>
+          Amount:
+          <input type="number" value={amount} onChange={handleAmountChange} />
+        </label>
+      </div>
+      <div>
+        <label>
+          From Currency:
+          <select value={fromCurrency} onChange={handleFromCurrencyChange}>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>
+          To Currency:
+          <select value={toCurrency} onChange={handleToCurrencyChange}>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </label>
+      </div>
+      <button onClick={convertCurrency}>Convert</button>
+      {convertedAmount && (
+        <div>
+          <h3>Converted Amount:</h3>
+          <p>{convertedAmount} {toCurrency}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CurrencyConverter;
